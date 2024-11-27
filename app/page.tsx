@@ -18,8 +18,15 @@ export default function Home() {
 	const [isIrrigate, setIsIrrigate] = useState(false);
 	const [value, setValues] = useState(0);
 	const [disable, setDisable] = useState(true);
+	const [humidity, setHumidity] = useState(0);
+	const [temperature, setTemperature] = useState(0);
 
 	useEffect(() => {
+		humidityValue();
+		temperatureValue();
+		handleSoil();
+	});
+	const handleSoil = () => {
 		const path = "Sensors/soil";
 		const valueRef = ref(database, path);
 		const unsubscribe = onValue(valueRef, (snapshot) => {
@@ -35,7 +42,31 @@ export default function Home() {
 		return () => {
 			unsubscribe();
 		};
-	});
+	};
+
+	const humidityValue = () => {
+		const path = "Sensors/humidity";
+		const valueRef = ref(database, path);
+		const unsubscribe = onValue(valueRef, (snapshot) => {
+			const values = snapshot.val();
+			setHumidity(values);
+		});
+		return () => {
+			unsubscribe();
+		};
+	};
+
+	const temperatureValue = () => {
+		const path = "Sensors/temperature";
+		const valueRef = ref(database, path);
+		const unsubscribe = onValue(valueRef, (snapshot) => {
+			const values = snapshot.val();
+			setTemperature(values);
+		});
+		return () => {
+			unsubscribe();
+		};
+	};
 
 	const handleClick = async () => {
 		const path = "Controls/irrigation";
@@ -50,7 +81,7 @@ export default function Home() {
 	return (
 		<div className="flex flex-col items-center h-full p-4 gap-8 font-[family-name:var(--font-geist-sans)]">
 			<h1 className="text-4xl mt-20 font-bold customShadow">Soil Moisture</h1>
-			<Card className="bg-red-50 w-full mb-10 text-center">
+			<Card className="bg-red-50 w-full mb-8 text-center">
 				<CardHeader>
 					<div className="flex justify-center">
 						<CircularProgress
@@ -87,9 +118,15 @@ export default function Home() {
 			</Card>
 
 			<Image width={220} height={220} src={Logo} alt="Logo" />
-			<div className="flex justify-between gap-10 font-bold text-3xl">
-				<h1>Soil Moisture: </h1>
-				<b>{JSON.stringify(value)}</b>
+			<div className="flex flex-col gap-2">
+				<div className="flex justify-between gap-10 font-bold text-xl">
+					<h1>Humidity: </h1>
+					<b>{JSON.stringify(humidity)}</b>
+				</div>
+				<div className="flex justify-between gap-10 font-bold text-xl">
+					<h1>Temperature: </h1>
+					<b>{JSON.stringify(temperature)}</b>
+				</div>
 			</div>
 			{/* <Link
 				className="flex justify-center gap-3 font-bold items-center p-2"

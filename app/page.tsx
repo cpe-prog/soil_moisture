@@ -9,9 +9,7 @@ import {
 	CardHeader,
 } from "@/components/ui/card";
 import { CircularProgress } from "@nextui-org/react";
-import { MoveRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
 	return (
@@ -52,13 +50,13 @@ export default function Home() {
 				<h1>Soil Moisture: </h1>
 				<b>34</b>
 			</div>
-			<Link
+			{/* <Link
 				className="flex justify-center gap-3 font-bold items-center p-2"
 				href={"/controls"}
 			>
 				<MoveRight />
 				Controls
-			</Link>
+			</Link> */}
 		</div>
 	);
 }
